@@ -217,6 +217,12 @@ defmodule Horde.RegistryImpl do
         send(listener, {:unregister, state.name, key, other_pid})
       end
 
+      Logger.info(
+        "(HORDE) sending name_conflict to #{inspect(other_pid)} data: #{
+          inspect({key, other_value, state.name, pid})
+        }"
+      )
+
       Process.exit(other_pid, {:name_conflict, {key, other_value}, state.name, pid})
     end
 

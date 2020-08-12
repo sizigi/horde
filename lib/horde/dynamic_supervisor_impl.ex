@@ -720,7 +720,11 @@ defmodule Horde.DynamicSupervisorImpl do
 
   defp add_children(children, state) do
     Enum.map(children, fn child_spec ->
-      case Horde.ProcessesSupervisor.start_child(supervisor_name(state.name), child_spec) do
+      Logger.info("(HORDE) trying to start child #{inspect({supervisor_name(state.name), child_spec})}")
+      res = Horde.ProcessesSupervisor.start_child(supervisor_name(state.name), child_spec)
+      Logger.info("(HORDE) res: #{inspect(res)}")
+
+      case res do
         {:ok, child_pid} ->
           {{:ok, child_pid}, child_spec}
 
